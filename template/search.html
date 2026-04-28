@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head><title>Search</title></head>
+<body>
+  <nav>
+    <a href="/dashboard">Dashboard</a> |
+    <a href="/profiles">Profiles</a> |
+    <a href="/search">Search</a> |
+    <a href="/account">Account</a> |
+    <form action="/logout" method="POST" style="display:inline">
+      <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}">
+      <button type="submit">Logout</button>
+    </form>
+  </nav>
+  <hr>
+  <h1>Search Profiles</h1>
+  <form method="GET" action="/search">
+    <input type="text" name="q" value="{{ .Query }}" placeholder="e.g. young males from nigeria">
+    <button type="submit">Search</button>
+  </form>
+  <p>Examples: "young males from nigeria", "females above 30", "adult males from kenya"</p>
+
+  {{if .Query}}
+  {{if .Profiles}}
+  <p>{{ .Total }} result(s) for "{{ .Query }}"</p>
+  <table border="1" cellpadding="6">
+    <thead>
+      <tr><th>Name</th><th>Gender</th><th>Age</th><th>Country</th></tr>
+    </thead>
+    <tbody>
+      {{range .Profiles}}
+      <tr>
+        <td><a href="/profiles/{{ .ID }}">{{ .Name }}</a></td>
+        <td>{{ .Gender }}</td>
+        <td>{{ .Age }} ({{ .AgeGroup }})</td>
+        <td>{{ .CountryName }}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{else}}
+  <p>No results for "{{ .Query }}"</p>
+  {{end}}
+  {{end}}
+</body>
+</html>

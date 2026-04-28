@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head><title>Profiles</title></head>
+<body>
+  <nav>
+    <a href="/dashboard">Dashboard</a> |
+    <a href="/profiles">Profiles</a> |
+    <a href="/search">Search</a> |
+    <a href="/account">Account</a> |
+    <form action="/logout" method="POST" style="display:inline">
+      <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}">
+      <button type="submit">Logout</button>
+    </form>
+  </nav>
+  <hr>
+  <h1>Profiles ({{ .Total }} total)</h1>
+
+  <form method="GET" action="/profiles">
+    Gender: <select name="gender">
+      <option value="">Any</option>
+      <option value="male" {{if eq .Filters.Gender "male"}}selected{{end}}>Male</option>
+      <option value="female" {{if eq .Filters.Gender "female"}}selected{{end}}>Female</option>
+    </select>
+    Age Group: <select name="age_group">
+      <option value="">Any</option>
+      <option value="child" {{if eq .Filters.AgeGroup "child"}}selected{{end}}>Child</option>
+      <option value="teenager" {{if eq .Filters.AgeGroup "teenager"}}selected{{end}}>Teenager</option>
+      <option value="adult" {{if eq .Filters.AgeGroup "adult"}}selected{{end}}>Adult</option>
+      <option value="senior" {{if eq .Filters.AgeGroup "senior"}}selected{{end}}>Senior</option>
+    </select>
+    Country: <input type="text" name="country_id" value="{{ .Filters.CountryID }}" placeholder="e.g. NG" maxlength="2">
+    <button type="submit">Filter</button>
+    <a href="/profiles">Reset</a>
+  </form>
+
+  {{if eq .Role "admin"}}<p><a href="/profiles/create">+ Create Profile</a></p>{{end}}
+  <p><a href="/profiles/export">↓ Export CSV</a></p>
+
+  {{if .Profiles}}
+  <table border="1" cellpadding="6">
+    <thead>
+      <tr>
+        <th>Name</th><th>Gender</th><th>Age</th><th>Age Group</th><th>Country</th><th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Profiles}}
+      <tr>
+        <td><a href="/profiles/{{ .ID }}">{{ .Name }}</a></td>
+        <td>{{ .Gender }}</td>
+        <td>{{ .Age }}</td>
+        <td>{{ .AgeGroup }}</td>
+        <td>{{ .CountryName }} ({{ .CountryID }})</td>
+        <td>{{ .CreatedAt.Format "2006-01-02" }}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  <p>
+    Page {{ .Page }} of {{ .TotalPages }} |
+    {{if gt .Page 1}}<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}{{ .QueryString }}">Prev</a>{{end}}
+    {{if lt .Page .TotalPages}}<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}{{ .QueryString }}">Next</a>{{end}}
+  </p>
+  {{else}}
+  <p>No profiles found.</p>
+  {{end}}
+</body>
+</html>

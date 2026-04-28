@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><title>Create Profile</title></head>
+<body>
+  <nav>
+    <a href="/dashboard">Dashboard</a> |
+    <a href="/profiles">Profiles</a> |
+    <a href="/search">Search</a> |
+    <a href="/account">Account</a> |
+    <form action="/logout" method="POST" style="display:inline">
+      <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}">
+      <button type="submit">Logout</button>
+    </form>
+  </nav>
+  <hr>
+  <a href="/profiles">← Back</a>
+  <h1>Create Profile</h1>
+  {{if .Error}}<p style="color:red">{{ .Error }}</p>{{end}}
+  <form method="POST" action="/profiles/create">
+    <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}">
+    <label>Name: <input type="text" name="name" required autofocus></label>
+    <button type="submit">Create</button>
+  </form>
+</body>
+</html>
