@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>Profile — {{ .Profile.Name }}</title></head>
+<body>
+  <nav>
+    <a href="/dashboard">Dashboard</a> |
+    <a href="/profiles">Profiles</a> |
+    <a href="/search">Search</a> |
+    <a href="/account">Account</a> |
+    <form action="/logout" method="POST" style="display:inline">
+      <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}">
+      <button type="submit">Logout</button>
+    </form>
+  </nav>
+  <hr>
+  <a href="/profiles">← Back to Profiles</a>
+  <h1>{{ .Profile.Name }}</h1>
+  <table border="1" cellpadding="6">
+    <tr><td>ID</td><td>{{ .Profile.ID }}</td></tr>
+    <tr><td>Gender</td><td>{{ .Profile.Gender }} ({{ printf "%.0f" (mul .Profile.GenderProbability 100) }}%)</td></tr>
+    <tr><td>Age</td><td>{{ .Profile.Age }} ({{ .Profile.AgeGroup }})</td></tr>
+    <tr><td>Country</td><td>{{ .Profile.CountryName }} / {{ .Profile.CountryID }} ({{ printf "%.0f" (mul .Profile.CountryProbability 100) }}%)</td></tr>
+    <tr><td>Created</td><td>{{ .Profile.CreatedAt.Format "2006-01-02 15:04" }}</td></tr>
+  </table>
+  {{if eq .Role "admin"}}
+  <form action="/profiles/{{ .Profile.ID }}/delete" method="POST" onsubmit="return confirm('Delete this profile?')">
+    <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}">
+    <button type="submit">Delete Profile</button>
+  </form>
+  {{end}}
+</body>
+</html>

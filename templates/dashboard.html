@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><title>Dashboard</title></head>
+<body>
+  <nav>
+    <a href="/dashboard">Dashboard</a> |
+    <a href="/profiles">Profiles</a> |
+    <a href="/search">Search</a> |
+    <a href="/account">Account</a> |
+    <form action="/logout" method="POST" style="display:inline">
+      <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}">
+      <button type="submit">Logout</button>
+    </form>
+  </nav>
+  <hr>
+  <h1>Dashboard</h1>
+  <p>Logged in as: <strong>{{ .Username }}</strong> ({{ .Role }})</p>
+  <p>Total profiles: <strong>{{ .TotalProfiles }}</strong></p>
+  <ul>
+    <li><a href="/profiles">Browse Profiles</a></li>
+    <li><a href="/search">Search Profiles</a></li>
+    {{if eq .Role "admin"}}<li><a href="/profiles/create">Create Profile</a></li>{{end}}
+    <li><a href="/profiles/export">Export CSV</a></li>
+  </ul>
+</body>
+</html>
