@@ -17,10 +17,10 @@ func main() {
 
 	// Auth routes
 	mux.HandleFunc("GET /", handlers.Login)
-	mux.HandleFunc("GET /auth/github", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "http://54.91.238.144:8080/auth/github", http.StatusTemporaryRedirect)
-	})
-	// mux.HandleFunc("GET /auth/github", handlers.GithubLogin)
+	// mux.HandleFunc("GET /auth/github", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.Redirect(w, r, "http://54.91.238.144:8080/auth/github", http.StatusTemporaryRedirect)
+	// })
+	mux.HandleFunc("GET /auth/github", handlers.GithubLogin)
 	mux.HandleFunc("GET /auth/github/callback", handlers.GithubCallback)
 	mux.HandleFunc("POST /logout", handlers.Logout)
 
